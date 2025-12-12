@@ -1,53 +1,34 @@
-const KEY = "cm_state_v1";
+const KEY = "cm_auth";
 
 export const state = {
-  data: {
-    auth: {
-      token: null,
-      user: null,
-    },
-  },
-
   hydrate() {
+    // dipanggil saat app bootstrap
     try {
       const raw = localStorage.getItem(KEY);
-      if (!raw) return;
-      const parsed = JSON.parse(raw);
-      if (parsed?.auth) this.data.auth = parsed.auth;
-    } catch (e) {
-      console.warn("State hydrate failed:", e);
-    }
-  },
-
-  persist() {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(this.data));
-    } catch (e) {
-      console.warn("State persist failed:", e);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch {
+      return null;
     }
   },
 
   isAuthed() {
-    return Boolean(this.data.auth.token);
+    return !!this.getToken();
   },
 
   setAuth({ token, user }) {
-    this.data.auth.token = token || null;
-    this.data.auth.user = user || null;
-    this.persist();
+    localStorage.setItem(KEY, JSON.stringify({ token, user }));
   },
 
   clearAuth() {
-    this.data.auth.token = null;
-    this.data.auth.user = null;
-    this.persist();
+    localStorage.removeItem(KEY);
   },
 
   getToken() {
-    return this.data.auth.token;
+    return JSON.parse(localStorage.getItem(KEY) || "{}").token || null;
   },
 
   getUser() {
-    return this.data.auth.user;
+    return JSON.parse(localStorage.getItem(KEY) || "{}").user || null;
   },
 };

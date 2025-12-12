@@ -2,8 +2,11 @@ const PROD_API_BASE = "https://api.gustradev.com";
 const isLocal =
   window.location.origin.startsWith("http://localhost") ||
   window.location.origin.startsWith("http://127.0.0.1");
-// Use Vite dev server proxy on local, hit production domain otherwise
-const API_BASE = isLocal ? "" : PROD_API_BASE;
+const isViteDev = typeof import.meta !== "undefined" && !!import.meta.hot;
+const devEnvBase =
+  typeof import.meta !== "undefined" ? import.meta.env?.VITE_DEV_API_BASE : null;
+// Dev: use env override if provided, else relative (for proxy). Prod: fixed host.
+const API_BASE = isViteDev ? devEnvBase || "" : PROD_API_BASE;
 
 export async function api(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
