@@ -47,3 +47,7 @@ postcss.config.js
 # =========================
 .vscode/
 .idea/
+
+
+backend/package-lock.json
+backend/prisma/migrations/
