@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Company Management</title>
+  <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+
+  <!-- Tailwind CDN (DEV) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: "#FE5300",
+              dark: "#0F172A"
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <meta name="description" content="Company & Project Monitoring System (Vanilla JS SPA)" />
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+  <!-- App Shell -->
+  <div id="app" class="min-h-screen">
+    <!-- Injected by module-loader -->
+  </div>
+
+  <noscript>
+    <div class="p-6 text-center">
+      Aplikasi ini membutuhkan JavaScript.
+    </div>
+  </noscript>
+
+  <!-- Bootstrap -->
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
