@@ -6,19 +6,46 @@ import rateLimit from "express-rate-limit";
 export function createApp() {
   const app = express();
 
+  // ====== BASIC INFO ======
+  app.get("/", (req, res) => {
+    res.json({
+      name: "Company Management API",
+      status: "running",
+      health: "/health"
+    });
+  });
+
+  // ====== SECURITY ======
   app.use(helmet());
-  app.use(cors());
+
+  app.use(
+    cors({
+      origin: [
+        "http://localhost:5500",
+        "https://app.gustradev.com"
+      ],
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      credentials: true
+    })
+  );
+
   app.use(express.json({ limit: "2mb" }));
 
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000,
-      max: 300
+      max: 300,
+      standardHeaders: true,
+      legacyHeaders: false
     })
   );
 
+  // ====== HEALTH CHECK ======
   app.get("/health", (req, res) => {
-    res.json({ ok: true, time: new Date().toISOString() });
+    res.json({
+      ok: true,
+      time: new Date().toISOString()
+    });
   });
 
   return app;
