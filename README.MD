@@ -1,285 +1,220 @@
-ClickUp-Like Company & Project Management System
-Full Vanilla JavaScript • Modular SPA • Self-Hosted
+# Company Management System
 
-======================================================================
-1. PROJECT OVERVIEW
-======================================================================
+ClickUp-like Project & Company Monitoring  
+**Full Vanilla JavaScript · Modular SPA · Self-Hosted**
 
-Project ini adalah sistem Company & Project Monitoring dengan konsep
-mirip ClickUp, namun dibangun dengan pendekatan:
+---
 
-- Full Vanilla JavaScript (Frontend & Backend)
-- Modular Single Page Application (SPA)
-- Tanpa framework frontend (React/Vue/Angular)
-- Self-hosted (server laptop sendiri)
-- Flexible hierarchy & cross-relation antar task
-- AI-assisted development friendly
+## Overview
 
-Project root directory:
+This project is a **Company, Department, Project, and Task Management System** inspired by ClickUp, built using a **full vanilla JavaScript stack** (frontend & backend).
+
+The system is designed to be:
+- Modular
+- Flexible
+- Self-hosted
+- Friendly for long-term development
+- Easy to extend by humans and AI
+
+Project root directory:  
 D:/company-management
 
+---
 
-======================================================================
-2. GOALS & USE CASE
-======================================================================
+## Key Principles
 
-Tujuan utama sistem:
+- No frontend frameworks (no React, Vue, Angular)
+- Modular Single Page Application (SPA)
+- Entities are fully movable (no hard coupling)
+- Cross-project & cross-department task relations
+- Clean architecture for scalability
+- Clear structure for AI-assisted development
 
-- Monitoring multi-company dalam satu akun user
-- Manajemen Department, Project, Task secara fleksibel
-- Relasi lintas struktur (task antar project / department)
-- Visualisasi progress (Dashboard, Gantt, Calendar)
-- Struktur data yang bisa dipindah-pindah tanpa refactor besar
+---
 
-Use case utama:
-- Internal company monitoring
-- Client project tracking
-- Long-term scalable project management system
+## Technology Stack
 
-
-======================================================================
-3. TECHNOLOGY STACK
-======================================================================
-
-FRONTEND
+### Frontend
 - HTML5
 - Vanilla JavaScript (ES Modules)
-- Tailwind CSS
-  - Development: Tailwind CDN
-  - Production: Tailwind CLI (extract & purge CSS)
-- Manual SPA Router + Module Loader
+- Tailwind CSS  
+  - Development: Tailwind CDN  
+  - Production: Tailwind CLI (CSS extraction & purge)
+- Custom SPA Router
+- Dynamic Module Loader
 
-BACKEND
+### Backend
 - Node.js
-- Express (default) atau Fastify
+- Express (or Fastify)
 - JWT Authentication
-- Multer (file upload)
 - REST API (JSON)
+- Multer (file uploads)
 
-DATABASE
-- Primary recommended: PostgreSQL
-- Alternative: MySQL / MariaDB
-- phpMyAdmin boleh digunakan
-- ORM recommended: Prisma
+### Database
+- PostgreSQL (recommended)
+- MySQL / MariaDB (supported)
+- Prisma ORM (recommended)
+- phpMyAdmin supported if needed
 
-DEPLOYMENT
+### Deployment
 - Frontend: Static files
 - Backend: Node.js service
-- Public access: Cloudflare Tunnel
-- Full root access (install bebas)
+- Public access via Cloudflare Tunnel
+- Full root access on server
 
+---
 
-======================================================================
-4. CORE DATA HIERARCHY
-======================================================================
+## Core Data Hierarchy
 
-User
- └── Company
-      └── Department
-           └── Project
-                └── Task Group
-                     └── Task
+User  
+└── Company  
+  └── Department  
+    └── Project  
+      └── Task Group  
+        └── Task  
 
-IMPORTANT:
-- Setiap entity bisa dipindahkan ke parent lain
-- Task bisa memiliki relasi lintas struktur
-- Tidak ada hard coupling antar entity
+Notes:
+- Every entity can be reassigned to another parent
+- Tasks may have relations across projects and departments
+- No rigid hierarchy constraints
 
+---
 
-======================================================================
-5. PROJECT STRUCTURE
-======================================================================
+## Project Structure
 
-D:/company-management
-|
-|-- frontend/
-|   |-- index.html              (SPA entry point)
-|   |-- app.js                  (bootstrap application)
-|   |-- module-loader.js        (dynamic module loader)
-|   |-- router.js               (SPA routing)
-|   |
-|   |-- modules/
-|   |   |-- auth/
-|   |   |-- dashboard/
-|   |   |-- company/
-|   |   |-- department/
-|   |   |-- project/
-|   |   |-- task/
-|   |   |-- gantt/
-|   |
-|   |-- services/
-|   |   |-- api.js
-|   |   |-- auth.service.js
-|   |   |-- state.js
-|   |
-|   |-- assets/
-|       |-- css/
-|       |-- icons/
-|
-|-- backend/
-|   |-- src/
-|   |   |-- server.js
-|   |   |-- app.js
-|   |   |-- routes.js
-|   |   |
-|   |   |-- modules/
-|   |   |   |-- auth/
-|   |   |   |-- company/
-|   |   |   |-- department/
-|   |   |   |-- project/
-|   |   |   |-- task/
-|   |   |   |-- relation/
-|   |   |
-|   |   |-- middleware/
-|   |   |-- utils/
-|   |
-|   |-- prisma/
-|   |   |-- schema.prisma
-|   |
-|   |-- package.json
-|
-|-- README.txt  (rename to README.md for GitHub)
+company-management/  
+├── frontend/  
+│   ├── index.html  
+│   ├── app.js  
+│   ├── module-loader.js  
+│   ├── router.js  
+│   ├── modules/  
+│   │   ├── auth/  
+│   │   ├── dashboard/  
+│   │   ├── company/  
+│   │   ├── department/  
+│   │   ├── project/  
+│   │   ├── task/  
+│   │   └── gantt/  
+│   ├── services/  
+│   └── assets/  
+│       ├── css/  
+│       └── icons/  
+│  
+├── backend/  
+│   ├── src/  
+│   │   ├── modules/  
+│   │   │   ├── auth/  
+│   │   │   ├── company/  
+│   │   │   ├── department/  
+│   │   │   ├── project/  
+│   │   │   ├── task/  
+│   │   │   └── relation/  
+│   │   ├── middleware/  
+│   │   └── utils/  
+│   └── prisma/  
+│  
+└── README.md  
 
+---
 
-======================================================================
-6. FRONTEND ARCHITECTURE
-======================================================================
+## Frontend Architecture
 
-SPA Flow:
-
-index.html
- → app.js
-   → module-loader.js
-     → load module based on route & auth state
-
-Characteristics:
-- No page reload
-- Dynamic import per module
-- Each module has:
+- Single Page Application (SPA)
+- No page reloads
+- Modules loaded dynamically based on route
+- Each module contains:
   - View (HTML)
-  - Logic (JS)
-  - Optional scoped styles (Tailwind)
+  - Logic (JavaScript)
+  - Tailwind-based styling
 
+---
 
-======================================================================
-7. ROUTING CONVENTION
-======================================================================
+## Routing Convention
 
-Example routes:
+Examples:
+- #/login
+- #/register
+- #/dashboard
+- #/company/:id
+- #/department/:id
+- #/project/:id
+- #/task/:id
+- #/gantt
 
-#/login
-#/register
-#/dashboard
-#/company/:id
-#/department/:id
-#/project/:id
-#/task/:id
-#/gantt
+Routing is intentionally manual for clarity and control.
 
-Routing dibuat manual agar:
-- Mudah dikontrol
-- Mudah dikembangkan AI
-- Tidak tergantung library eksternal
+---
 
+## Authentication & Security
 
-======================================================================
-8. DATABASE CORE ENTITIES
-======================================================================
+- JWT-based authentication
+- API protected by middleware
+- Token managed in frontend state
+- CORS restricted to Cloudflare domains
+- Backend API is not publicly exposed
 
-Main tables:
-- users
-- companies
-- departments
-- projects
-- task_groups
-- tasks
-- task_relations
+---
 
-task_relations digunakan untuk:
-- Cross-project task relation
-- Dependency
-- Reference
-- Custom workflow
+## Monitoring & Visualization (Planned)
 
-
-======================================================================
-9. AUTH & SECURITY
-======================================================================
-
-- JWT based authentication
-- Token dikontrol di frontend
-- API protected via middleware
-- CORS dibatasi domain Cloudflare
-- Backend API tidak public langsung
-
-
-======================================================================
-10. MONITORING & VISUALIZATION
-======================================================================
-
-Planned modules:
 - Dashboard overview
-- Progress roll-up
+- Progress aggregation
 - Gantt chart
 - Bi-weekly calendar
 - Activity timeline
 
+---
 
-======================================================================
-11. DEVELOPMENT NOTES
-======================================================================
+## Development Notes
 
-- Development dilakukan di Windows (D:/)
-- Backend bisa dijalankan lokal
-- Frontend bisa di-serve via XAMPP / static server
-- Tailwind CDN untuk dev, Tailwind CLI untuk production
-- Server production Linux via Cloudflare Tunnel
+- Local development on Windows (Drive D)
+- Frontend can be served via XAMPP or static server
+- Backend runs as Node.js service
+- Tailwind CDN for development
+- Tailwind CLI for production build
+- Production hosted on Linux server via Cloudflare Tunnel
 
+---
 
-======================================================================
-12. RULES FOR AI & DEVELOPERS
-======================================================================
+## Contribution Rules (Important)
 
-IMPORTANT RULES:
+- Do not introduce frontend frameworks
+- Keep all features modular
+- Maintain movable entity design
+- Always consider cross-entity relations
+- Follow existing folder and naming conventions
 
-- Jangan menambahkan framework frontend
-- Jangan mengubah struktur tanpa alasan kuat
-- Semua fitur harus modular
-- Semua entity harus movable
-- Relasi lintas struktur harus selalu dipertimbangkan
+This README is the **single source of truth** for development.
 
-README ini adalah single source of truth.
+---
 
-
-======================================================================
-13. ROADMAP
-======================================================================
+## Roadmap
 
 Phase 1:
-- Auth
+- Authentication
 - Company / Department / Project CRUD
-- SPA module loader
+- SPA base & module loader
 
 Phase 2:
 - Task management
 - Cross-task relations
-- Drag & move
+- Drag & move features
 
 Phase 3:
-- Gantt & calendar
+- Gantt & calendar views
 - File attachments
 
 Phase 4:
-- Roles
-- Notification
-- Activity log
+- Roles & permissions
+- Notifications
+- Activity logs
 
+---
 
-======================================================================
-14. FINAL NOTE
-======================================================================
+## Final Note
 
-Project ini dirancang untuk jangka panjang,
-self-hosted, scalable, dan AI-assisted development.
+This project is designed for long-term usage, self-hosted deployment,
+and scalable growth with AI-assisted development.
 
-Semua pengembangan wajib mengacu pada dokumen ini.
+All future development must align with this document.
