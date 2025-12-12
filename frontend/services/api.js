@@ -1,37 +1,20 @@
-import { state } from "./state.js";
+const PROD_API_BASE = "https://api.gustradev.com";
+const isLocal =
+  window.location.origin.startsWith("http://localhost") ||
+  window.location.origin.startsWith("http://127.0.0.1");
+// Use Vite dev server proxy on local, hit production domain otherwise
+const API_BASE = isLocal ? "" : PROD_API_BASE;
 
-/**
- * API base URL
- * - Dev: localhost
- * - Prod: api.gustradev.com (Cloudflare)
- */
-export const API_BASE = "http://localhost:3000"; // change later to https://api.gustradev.com
+export async function api(path, options = {}) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.token ? { Authorization: `Bearer ${options.token}` } : {}),
+    },
+    ...options,
+  });
 
-export async function apiFetch(path, options = {}) {
-  const url = `${API_BASE}${path}`;
-  const headers = {
-    "Content-Type": "application/json",
-    ...(options.headers || {}),
-  };
-
-  const token = state.getToken();
-  if (token) headers.Authorization = `Bearer ${token}`;
-
-  const res = await fetch(url, { ...options, headers });
-
-  // Try decode JSON
-  let data = null;
-  const isJson = res.headers.get("content-type")?.includes("application/json");
-  if (isJson) data = await res.json();
-  else data = await res.text();
-
-  if (!res.ok) {
-    const message = (data && data.message) ? data.message : `HTTP ${res.status}`;
-    const err = new Error(message);
-    err.status = res.status;
-    err.data = data;
-    throw err;
-  }
-
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.message || "API error");
   return data;
 }
