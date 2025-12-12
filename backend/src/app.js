@@ -3,6 +3,10 @@ import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 
+// src/app.js
+import authRoutes from "./modules/auth/auth.routes.js";
+app.use("/api/auth", authRoutes);
+
 export function createApp() {
   const app = express();
 
